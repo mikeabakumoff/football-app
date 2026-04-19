@@ -177,7 +177,7 @@ if (window.Telegram && window.Telegram.WebApp) {
 }
 
 // API URL — замените на ваш реальный адрес
-var API_URL = window.API_URL || 'https://laborious-unimpeded-appointee.ngrok-free.dev';
+var API_URL = window.API_URL || 'http://localhost:5000';
 
 var state = {
   month: 'current',
@@ -219,7 +219,9 @@ function loadData() {
   document.getElementById('main-content').innerHTML =
     '<div class="loading"><div class="spinner"></div>Загружаем матчи...</div>';
 
-  fetch(API_URL + '/api/matches?month=' + state.month)
+  fetch(API_URL + '/api/matches?month=' + state.month, {
+    headers: {'ngrok-skip-browser-warning': 'true'}
+  })
     .then(function(r){ return r.json(); })
     .then(function(data){
       state.data = data;
@@ -231,7 +233,9 @@ function loadData() {
     });
 
   // Загружаем статистику
-  fetch(API_URL + '/api/stats')
+  fetch(API_URL + '/api/stats', {
+    headers: {'ngrok-skip-browser-warning': 'true'}
+  })
     .then(function(r){ return r.json(); })
     .then(function(s){
       var badge = document.getElementById('accuracy-badge');
