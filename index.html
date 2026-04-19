@@ -274,6 +274,7 @@ function render() {
       var isOpen = state.openId === m.id;
       var hasPred = prob >= 65;
       var hasMedPred = prob >= 60 && prob < 65;
+      var hasAnyPred = prob > 0;
       var isDone = m.result !== null;
 
       var cardClass = 'match-card';
@@ -283,12 +284,14 @@ function render() {
         cardClass += ' high';
       } else if (hasMedPred) {
         cardClass += ' med';
+      } else if (hasAnyPred) {
+        cardClass += ' med';
       } else {
         cardClass += ' low';
       }
       if (isOpen) cardClass += ' open';
 
-      var probClass = hasPred ? 'prob-green' : hasMedPred ? 'prob-amber' : 'prob-gray';
+      var probClass = hasPred ? 'prob-green' : hasAnyPred ? 'prob-amber' : 'prob-gray';
       var probText = prob > 0 ? prob + '%' : '—';
 
       html += '<div class="' + cardClass + '" onclick="toggleDetail(\'' + m.id + '\')">';
@@ -351,9 +354,14 @@ function render() {
           }
 
         } else if (prob > 0) {
-          // Средний прогноз — только победитель
+          // Любой прогноз — показываем победителя и процент
           html += '<div class="drow"><span class="dico">📈</span><span class="dlbl">Победит:</span><span class="dval">' + (m.winner || '—') + ' — ' + prob + '%</span></div>';
-          html += '<div class="no-pred-note">Уверенность ' + prob + '% — ниже порога 65%.<br>Полная аналитика недоступна.</div>';
+          if (m.score_h !== null && m.score_a !== null) {
+            html += '<div class="drow"><span class="dico">📊</span><span class="dlbl">Счёт:</span><span class="dval">' + m.score_h + ' : ' + m.score_a + '</span></div>';
+          }
+          if (prob < 65) {
+            html += '<div class="no-pred-note">Уверенность ниже 65% — полная аналитика недоступна.</div>';
+          }
 
         } else {
           // Нет прогноза
