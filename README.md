@@ -3,9 +3,12 @@
 A Telegram Web App showing a football fixture calendar with per-match forecasts
 and a running accuracy counter.
 
-> **The live demo does not work.** The backend that serves the data is not
-> published, so the app loads and then reports that it could not fetch matches.
-> This repository is here for the front-end code, not as a working demo.
+The pipeline and model ensemble behind it are a separate repository:
+**[awelabs-footcast →](https://github.com/mikeabakumoff/awelabs-footcast)**
+
+> **The live demo does not work.** No backend is running behind the public link,
+> so the app loads and then reports that it could not fetch matches. This
+> repository is here for the front-end code, not as a working demo.
 >
 > All forecast figures and accuracy numbers visible in the front end are
 > **synthetic placeholders**.
@@ -49,8 +52,9 @@ of the other four rather than another view of the raw features:
 Two further regressors estimate goals scored by each side, which feeds the
 scoreline model below.
 
-Training set: roughly **16.9K matches** across five domestic leagues plus seven
-seasons of UEFA club competition.
+Training set: **17.1K matches** — eight seasons of the English, Spanish, Italian,
+French and German top divisions, plus seven seasons of the Champions League and
+Europa League.
 
 ### Validation, honestly
 
@@ -59,10 +63,15 @@ so the model is never validated on matches that precede its training data.
 Ordinary k-fold would leak the future into the past and inflate every number
 here.
 
-The aggregator's cross-validated accuracy is **58.7%** on three-way outcomes
-(home / draw / away). That is a cross-validation figure on historical data, not
-a claim about future matches, and the system makes no claim about betting
-returns of any kind.
+On three-way outcomes (home / draw / away), the combined model reaches **52.8%**
+cross-validated accuracy against a **44.0%** baseline of always predicting the
+home side — roughly nine points of signal. The aggregator scores higher than
+that, but its stack features are built from base models fit on the whole
+training set, so the extra points are leakage rather than skill; the details are
+in [awelabs-footcast](https://github.com/mikeabakumoff/awelabs-footcast#validation).
+
+That is a cross-validation figure on historical data, not a claim about future
+matches, and the system makes no claim about betting returns of any kind.
 
 ### Features
 
@@ -114,7 +123,9 @@ An LLM step reads match news and adjusts the forecast where something material
 — a manager change, a late fitness update — has not reached the structured
 feeds yet.
 
-> **The backend and pipeline are not published yet.**
+The collectors, feature build, training and publication gate are in
+**[awelabs-footcast](https://github.com/mikeabakumoff/awelabs-footcast)**, along
+with the database schema and the Flask API this front end talks to.
 
 ---
 
