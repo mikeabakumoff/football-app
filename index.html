@@ -32,32 +32,27 @@
 
   .app { max-width: 480px; margin: 0 auto; padding: 0 0 80px; }
 
-  /* Header */
   .header { padding: 16px 16px 12px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--bg); z-index: 10; }
   .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .logo { font-family: var(--font-head); font-size: 13px; font-weight: 600; letter-spacing: -0.3px; color: var(--text); }
   .logo span { color: var(--green); }
   .accuracy-badge { font-size: 11px; color: var(--green); background: var(--green-bg); padding: 3px 8px; border-radius: 20px; border: 1px solid rgba(34,197,94,0.2); }
 
-  /* Month tabs */
   .month-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
   .mtab { flex: 1; padding: 7px 0; text-align: center; font-size: 11px; font-family: var(--font-body); font-weight: 500; cursor: pointer; color: var(--muted); background: transparent; border: none; letter-spacing: 0.3px; transition: all 0.15s; }
   .mtab.active { background: var(--surface); color: var(--text); }
 
-  /* League filter */
   .league-bar { display: flex; gap: 6px; padding: 10px 16px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); }
   .league-bar::-webkit-scrollbar { display: none; }
   .lchip { flex-shrink: 0; padding: 4px 10px; border-radius: 20px; font-size: 11px; cursor: pointer; border: 1px solid var(--border); color: var(--muted); background: transparent; font-family: var(--font-body); transition: all 0.15s; white-space: nowrap; }
   .lchip.active { border-color: var(--border2); color: var(--text); background: var(--surface); }
 
-  /* Day section */
   .day-section { padding: 0 16px; }
   .day-header { display: flex; align-items: center; gap: 10px; padding: 14px 0 8px; }
   .day-name { font-size: 10px; font-weight: 500; color: var(--dim); letter-spacing: 0.8px; text-transform: uppercase; }
   .day-date { font-family: var(--font-head); font-size: 12px; color: var(--muted); }
   .day-line { flex: 1; height: 1px; background: var(--border); }
 
-  /* Match card */
   .match-card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; margin-bottom: 6px; overflow: hidden; cursor: pointer; transition: border-color 0.15s; }
   .match-card:hover { border-color: var(--border2); }
   .match-card.open { border-color: var(--border2); }
@@ -84,7 +79,6 @@
   .result-ok { color: var(--green); }
   .result-fail { color: var(--red); }
 
-  /* Detail panel */
   .match-detail { display: none; padding: 0 12px 12px; border-top: 1px solid var(--border); }
   .match-card.open .match-detail { display: block; }
 
@@ -110,16 +104,13 @@
   .result-score { font-family: var(--font-head); font-size: 18px; font-weight: 600; color: var(--text); }
   .result-verdict { font-size: 11px; margin-top: 3px; }
 
-  /* Empty state */
   .empty { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 12px; line-height: 1.8; }
   .empty-ico { font-size: 32px; margin-bottom: 12px; }
 
-  /* Loading */
   .loading { text-align: center; padding: 40px 20px; color: var(--muted); }
   .spinner { width: 24px; height: 24px; border: 2px solid var(--border2); border-top-color: var(--green); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 12px; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Bottom nav */
   .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg); border-top: 1px solid var(--border); display: flex; z-index: 20; max-width: 480px; margin: 0 auto; }
   .bnav-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 0; cursor: pointer; color: var(--dim); font-size: 9px; letter-spacing: 0.3px; text-transform: uppercase; transition: color 0.15s; }
   .bnav-item.active { color: var(--green); }
@@ -170,13 +161,12 @@
 
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
-// Telegram Web App init
+
 if (window.Telegram && window.Telegram.WebApp) {
   Telegram.WebApp.ready();
   Telegram.WebApp.expand();
 }
 
-// API URL — замените на ваш реальный адрес
 var API_URL = window.API_URL || 'http://localhost:5000';
 
 var state = {
@@ -232,7 +222,6 @@ function loadData() {
         '<div class="empty"><div class="empty-ico">⚠️</div>Не удалось загрузить данные.<br>Проверьте подключение.</div>';
     });
 
-  // Загружаем статистику
   fetch(API_URL + '/api/stats', {
     headers: {'ngrok-skip-browser-warning': 'true'}
   })
@@ -312,13 +301,12 @@ function render() {
       html += '</div>';
       html += '</div>';
 
-      // Detail panel
       if (isOpen) {
         html += '<div class="match-detail">';
         html += '<div class="dblock">';
 
         if (hasPred) {
-          // Полный прогноз
+
           html += '<div class="drow"><span class="dico">📈</span><span class="dlbl">Победит:</span><span class="dval">' + (m.winner || '—') + ' — ' + prob + '%</span></div>';
           if (m.score_h !== null && m.score_a !== null) {
             html += '<div class="drow"><span class="dico">📊</span><span class="dlbl">Счёт:</span><span class="dval">' + m.score_h + ' : ' + m.score_a + '</span></div>';
@@ -327,7 +315,6 @@ function render() {
             html += '<div class="drow"><span class="dico">⚽</span><span class="dlbl">Первый гол:</span><span class="dval">' + m.fg_player + ' (' + (m.fg_team || '') + ') ~' + (m.fg_minute || '?') + '\'</span></div>';
           }
 
-          // Травмы
           if ((m.injuries_home && m.injuries_home.length) || (m.injuries_away && m.injuries_away.length)) {
             html += '<div class="divider"></div>';
             html += '<div class="inj-section">';
@@ -354,7 +341,7 @@ function render() {
           }
 
         } else if (prob > 0) {
-          // Любой прогноз — показываем победителя и процент
+
           html += '<div class="drow"><span class="dico">📈</span><span class="dlbl">Победит:</span><span class="dval">' + (m.winner || '—') + ' — ' + prob + '%</span></div>';
           if (m.score_h !== null && m.score_a !== null) {
             html += '<div class="drow"><span class="dico">📊</span><span class="dlbl">Счёт:</span><span class="dval">' + m.score_h + ' : ' + m.score_a + '</span></div>';
@@ -364,11 +351,10 @@ function render() {
           }
 
         } else {
-          // Нет прогноза
+
           html += '<div class="no-pred-note">Прогноз ещё не готов.<br>Появится утром перед матчем.</div>';
         }
 
-        // Результат если матч сыгран
         if (isDone && m.result) {
           html += '<div class="result-block">';
           html += '<div class="result-title">РЕЗУЛЬТАТ</div>';
